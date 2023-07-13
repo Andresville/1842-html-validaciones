@@ -1,12 +1,12 @@
 export function valida(input) {
-  const tipoDeInput = input.dataset.tipo;
+  const tipoDeInput = input.dataset.tipo; //Busca los data-tipo en el HTML
   if (validadores[tipoDeInput]) {
     validadores[tipoDeInput](input);
   }
-
+// Pone o quita clases CSS y mensajes de error segun el campo este en valido o no
   if (input.validity.valid) {
     input.parentElement.classList.remove("input-container--invalid");
-    input.parentElement.querySelector(".input-message-error").innerHTML = "";
+    input.parentElement.querySelector(".input-message-error").innerHTML = "";// sino hay error busca la clase y deja el campo vacio
   } else {
     input.parentElement.classList.add("input-container--invalid");
     input.parentElement.querySelector(".input-message-error").innerHTML =
@@ -14,13 +14,15 @@ export function valida(input) {
   }
 }
 
+// No da distintos tipos de errores segun el campo
 const tipoDeErrores = [
-  "valueMissing",
-  "typeMismatch",
-  "patternMismatch",
-  "customError",
+  "valueMissing", // se fija que el campo no este vacio
+  "typeMismatch", // se fija que sea el formato de un email
+  "patternMismatch", // se fija que cumpla las condiciones establecidas en el HTML patter para que sea una contraseña valida
+  "customError",  // se fija que la fecha ingresada cumpla la condicion (en este caso ser mayor de 18 años)
 ];
 
+// Carga los errores segun el campo
 const mensajesDeError = {
   nombre: {
     valueMissing: "El campo nombre no puede estar vacío",
@@ -60,6 +62,7 @@ const validadores = {
   nacimiento: (input) => validarNacimiento(input),
 };
 
+//Recorre el arreglo anterior y se fija que tipo de error muestra
 function mostrarMensajeDeError(tipoDeInput, input) {
   let mensaje = "";
   tipoDeErrores.forEach((error) => {
@@ -72,6 +75,8 @@ function mostrarMensajeDeError(tipoDeInput, input) {
   });
   return mensaje;
 }
+
+// Validacion de la fecha de nacimiento
 
 function validarNacimiento(input) {
   const fechaCliente = new Date(input.value);
